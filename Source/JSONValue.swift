@@ -114,6 +114,7 @@ public struct Empty {
  *  JSONValue
  *  简易快捷JSON数据取值
  */
+@dynamicMemberLookup
 public struct JSONValue {
     
     // MARK: init
@@ -499,6 +500,21 @@ public struct JSONValue {
                 nextJSON[items] = newValue
                 self[[indexes[0]]] = nextJSON
             }
+        }
+    }
+    
+    /**
+     动态下标
+     */
+    public subscript(dynamicMember index: String) -> JSONValue {
+        
+        if let i = Int(index) {
+            
+            return self[i]
+        }
+        else {
+            
+            return self[index]
         }
     }
     
