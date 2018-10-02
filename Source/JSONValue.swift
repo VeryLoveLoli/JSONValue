@@ -14,40 +14,40 @@ public struct Number {
     
     var value: String
     
-    init()              {  value = ""     }
-    init(_ v: Int)      {  value = "\(v)" }
-    init(_ v: Int8)     {  value = "\(v)" }
-    init(_ v: Int16)    {  value = "\(v)" }
-    init(_ v: Int32)    {  value = "\(v)" }
-    init(_ v: Int64)    {  value = "\(v)" }
+    public init()              {  value = ""     }
+    public init(_ v: Int)      {  value = "\(v)" }
+    public init(_ v: Int8)     {  value = "\(v)" }
+    public init(_ v: Int16)    {  value = "\(v)" }
+    public init(_ v: Int32)    {  value = "\(v)" }
+    public init(_ v: Int64)    {  value = "\(v)" }
     
-    init(_ v: UInt)     {  value = "\(v)" }
-    init(_ v: UInt8)    {  value = "\(v)" }
-    init(_ v: UInt16)   {  value = "\(v)" }
-    init(_ v: UInt32)   {  value = "\(v)" }
-    init(_ v: UInt64)   {  value = "\(v)" }
+    public init(_ v: UInt)     {  value = "\(v)" }
+    public init(_ v: UInt8)    {  value = "\(v)" }
+    public init(_ v: UInt16)   {  value = "\(v)" }
+    public init(_ v: UInt32)   {  value = "\(v)" }
+    public init(_ v: UInt64)   {  value = "\(v)" }
 
-    init(_ v: Float)    {  value = "\(v)" }
-    init(_ v: Double)   {  value = "\(v)" }
-    init(_ v: Bool)     {  value = v ? "1" : "0" }
-    init(_ v: String)   {  value = v }
+    public init(_ v: Float)    {  value = "\(v)" }
+    public init(_ v: Double)   {  value = "\(v)" }
+    public init(_ v: Bool)     {  value = v ? "1" : "0" }
+    public init(_ v: String)   {  value = v }
 
-    var int:    Int     { get { return value.int } }
-    var int8:   Int8    { get { return value.int8 } }
-    var int16:  Int16   { get { return value.int16 } }
-    var int32:  Int32   { get { return value.int32 } }
-    var int64:  Int64   { get { return value.int64 } }
+    public var int:    Int     { get { return value.int } }
+    public var int8:   Int8    { get { return value.int8 } }
+    public var int16:  Int16   { get { return value.int16 } }
+    public var int32:  Int32   { get { return value.int32 } }
+    public var int64:  Int64   { get { return value.int64 } }
 
-    var uint:   UInt    { get { return value.uint } }
-    var uint8:  UInt8   { get { return value.uint8 } }
-    var uint16: UInt16  { get { return value.uint16 } }
-    var uint32: UInt32  { get { return value.uint32 } }
-    var uint64: UInt64  { get { return value.uint64 } }
+    public var uint:   UInt    { get { return value.uint } }
+    public var uint8:  UInt8   { get { return value.uint8 } }
+    public var uint16: UInt16  { get { return value.uint16 } }
+    public var uint32: UInt32  { get { return value.uint32 } }
+    public var uint64: UInt64  { get { return value.uint64 } }
     
-    var float:  Float   { get { return value.float } }
-    var double: Double  { get { return value.double } }
-    var bool:   Bool    { get { return value.bool } }
-    var string: String  { get { return  value } }
+    public var float:  Float   { get { return value.float } }
+    public var double: Double  { get { return value.double } }
+    public var bool:   Bool    { get { return value.bool } }
+    public var string: String  { get { return  value } }
 }
 
 // MARK: - Number 等号 赋值
@@ -75,31 +75,37 @@ extension Number: ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, Expres
 
 extension String {
     
-    var int:    Int     { get {  return Int(self.double) } }
-    var int8:   Int8    { get { return Int8( (self.int << 56) >> 56 ) } }
-    var int16:  Int16   { get { return Int16( (self.int << 48) >> 48 ) } }
-    var int32:  Int32   { get { return Int32( (self.int << 32) >> 32 ) } }
-    var int64:  Int64   { get { return Int64( self.int ) } }
+    public var int:    Int     { get {  return Int(self.double) } }
+    public var int8:   Int8    { get { return Int8( (self.int << 56) >> 56 ) } }
+    public var int16:  Int16   { get { return Int16( (self.int << 48) >> 48 ) } }
+    public var int32:  Int32   { get { return Int32( (self.int << 32) >> 32 ) } }
+    public var int64:  Int64   { get { return Int64( self.int ) } }
     
-    var uint:   UInt    { get { return self.double <= -1 ? (UInt.max - UInt(-self.int) + 1) : (self.double < 0 ? 0 : UInt(self.double)) } }
-    var uint8:  UInt8   { get { return UInt8( self.uint % ( UInt(UInt8.max) + 1 ) ) } }
-    var uint16: UInt16  { get { return UInt16( self.uint % ( UInt(UInt16.max) + 1 ) ) } }
-    var uint32: UInt32  { get { return UInt32( self.uint % ( UInt(UInt32.max) + 1 ) ) } }
-    var uint64: UInt64  { get { return UInt64( self.uint ) } }
+    public var uint:   UInt    { get { return self.double <= -1 ? (UInt.max - UInt(-self.int) + 1) : (self.double < 0 ? 0 : UInt(self.double)) } }
+    public var uint8:  UInt8   { get { return UInt8( self.uint % ( UInt(UInt8.max) + 1 ) ) } }
+    public var uint16: UInt16  { get { return UInt16( self.uint % ( UInt(UInt16.max) + 1 ) ) } }
+    public var uint32: UInt32  { get { return UInt32( self.uint % ( UInt(UInt32.max) + 1 ) ) } }
+    public var uint64: UInt64  { get { return UInt64( self.uint ) } }
     
-    var float:  Float   { get { return Float.init(self) ?? 0 } }
-    var double: Double  { get { return Double.init(self) ?? 0 } }
-    var bool:   Bool    { get { return self != "" && self != "0" && self != "false" } }
+    public var float:  Float   { get { return Float.init(self) ?? 0 } }
+    public var double: Double  { get { return Double.init(self) ?? 0 } }
+    public var bool:   Bool    { get { return self != "" && self != "0" && self != "false" } }
 }
 
 // MARK: - 空值
 
 public struct Empty {
     
-    var array: Array<Any> = []
-    var dictionary: Dictionary<String, Any> = [:]
-    var string: String = ""
-    var number: Number = Number()
+    // MARK: Parameter
+
+    public var array: Array<Any> = []
+    public var dictionary: Dictionary<String, Any> = [:]
+    public var string: String = ""
+    public var number: Number = Number()
+    
+    // MARK: init
+
+    public init() {}
 }
 
 // MARK: - JSON数据取值
@@ -112,7 +118,7 @@ public struct JSONValue {
     
     // MARK: init
     
-    init(_ obj: Any? = Empty()) {
+    public init(_ obj: Any? = Empty()) {
         
         if let value = obj {
             
@@ -209,7 +215,7 @@ public struct JSONValue {
     private var object: Any
     
     /// 字符串
-    var string: String {
+    public var string: String {
         
         get {
             
@@ -222,7 +228,7 @@ public struct JSONValue {
     }
     
     /// 数值
-    var number: Number {
+    public var number: Number {
         
         get {
             
@@ -243,7 +249,7 @@ public struct JSONValue {
     }
     
     /// 字典
-    var dictionary: Dictionary<String, JSONValue> {
+    public var dictionary: Dictionary<String, JSONValue> {
         
         get {
             
@@ -268,7 +274,7 @@ public struct JSONValue {
     }
     
     /// 数组
-    var array: Array<JSONValue> {
+    public var array: Array<JSONValue> {
         
         get {
             
@@ -293,7 +299,7 @@ public struct JSONValue {
      
      - parameter    isValueObject:  是否是 数组/字典 元素值
      */
-    func JSONFormatString(_ isValueObject: Bool = false) -> String {
+    public func JSONFormatString(_ isValueObject: Bool = false) -> String {
         
         switch object {
             
@@ -357,7 +363,7 @@ public struct JSONValue {
     /**
      数组下标
      */
-    subscript(_ index: Int) -> JSONValue {
+    public subscript(_ index: Int) -> JSONValue {
         
         get {
             
@@ -408,7 +414,7 @@ public struct JSONValue {
     /**
      字典下标
      */
-    subscript(index: String) -> JSONValue {
+    public subscript(index: String) -> JSONValue {
         
         get {
             
@@ -445,7 +451,7 @@ public struct JSONValue {
     /**
      下标组
      */
-    subscript(indexes: [Any]) -> JSONValue {
+    public subscript(indexes: [Any]) -> JSONValue {
         
         get {
             
@@ -499,7 +505,7 @@ public struct JSONValue {
     /**
      是否是空值
      */
-    func isEmpty() -> Bool {
+    public func isEmpty() -> Bool {
         
         switch object {
         case _ as Empty:
@@ -512,7 +518,7 @@ public struct JSONValue {
     /**
      格式输出
      */
-    func formatPrint() {
+    public func formatPrint() {
         
         let string = self.JSONFormatString()
         
