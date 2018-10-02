@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - 数值
 
-struct Number {
+public struct Number {
     
     var value: String
     
@@ -94,7 +94,7 @@ extension String {
 
 // MARK: - 空值
 
-struct Empty {
+public struct Empty {
     
     var array: Array<Any> = []
     var dictionary: Dictionary<String, Any> = [:]
@@ -108,7 +108,7 @@ struct Empty {
  *  JSONValue
  *  简易快捷JSON数据取值
  */
-struct JSONValue {
+public struct JSONValue {
     
     // MARK: init
     
