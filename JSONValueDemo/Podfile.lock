@@ -1,5 +1,5 @@
 PODS:
-  - JSONValue (0.0.1)
+  - JSONValue (0.0.2)
 
 DEPENDENCIES:
   - JSONValue (from `https://github.com/VeryLoveLoli/JSONValue.git`)
@@ -10,11 +10,11 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   JSONValue:
-    :commit: dd73da9a10570bd5373ab50e7f918a944fcc0ef5
+    :commit: 726e094182b0a5da0277231d80d78c1f0d1102ff
     :git: https://github.com/VeryLoveLoli/JSONValue.git
 
 SPEC CHECKSUMS:
-  JSONValue: c160f7e09a65fdac6a8524a809007e0e47e9af5c
+  JSONValue: e18b6b14fefd7cfcbe0d8833812db862b6377e96
 
 PODFILE CHECKSUM: fbee8dd272d260e158edc92be0f2b286e04c206e
 
