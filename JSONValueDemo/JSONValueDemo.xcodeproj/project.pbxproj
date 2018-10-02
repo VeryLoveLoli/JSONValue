@@ -15,6 +15,7 @@
 		5E3C5BC72163631F00C19A95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E3C5BC52163631F00C19A95 /* LaunchScreen.storyboard */; };
 		5E3C5BD22163631F00C19A95 /* JSONValueDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3C5BD12163631F00C19A95 /* JSONValueDemoTests.swift */; };
 		5E3C5BDD2163631F00C19A95 /* JSONValueDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3C5BDC2163631F00C19A95 /* JSONValueDemoUITests.swift */; };
+		E801270A24CBBE7F6813A215 /* Pods_JSONValueDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 623F78310A0E308056A38E68 /* Pods_JSONValueDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,9 @@
 		5E3C5BD82163631F00C19A95 /* JSONValueDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSONValueDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E3C5BDC2163631F00C19A95 /* JSONValueDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValueDemoUITests.swift; sourceTree = "<group>"; };
 		5E3C5BDE2163631F00C19A95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		623F78310A0E308056A38E68 /* Pods_JSONValueDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JSONValueDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CD87E0743EAB0CDD1967377 /* Pods-JSONValueDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSONValueDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo.release.xcconfig"; sourceTree = "<group>"; };
+		995EBF9E743780E1EE47B20B /* Pods-JSONValueDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSONValueDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E801270A24CBBE7F6813A215 /* Pods_JSONValueDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +88,8 @@
 				5E3C5BD02163631F00C19A95 /* JSONValueDemoTests */,
 				5E3C5BDB2163631F00C19A95 /* JSONValueDemoUITests */,
 				5E3C5BB72163631F00C19A95 /* Products */,
+				6A66277E05411E0306032BEE /* Pods */,
+				BF98DFFE7E01B03058C1FF60 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,6 +135,23 @@
 			path = JSONValueDemoUITests;
 			sourceTree = "<group>";
 		};
+		6A66277E05411E0306032BEE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				995EBF9E743780E1EE47B20B /* Pods-JSONValueDemo.debug.xcconfig */,
+				6CD87E0743EAB0CDD1967377 /* Pods-JSONValueDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BF98DFFE7E01B03058C1FF60 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				623F78310A0E308056A38E68 /* Pods_JSONValueDemo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +159,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5E3C5BE12163632000C19A95 /* Build configuration list for PBXNativeTarget "JSONValueDemo" */;
 			buildPhases = (
+				DA5A86A8435C9E3398C4D091 /* [CP] Check Pods Manifest.lock */,
 				5E3C5BB22163631F00C19A95 /* Sources */,
 				5E3C5BB32163631F00C19A95 /* Frameworks */,
 				5E3C5BB42163631F00C19A95 /* Resources */,
+				6245C97E9812A7CBC0249309 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -253,6 +279,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6245C97E9812A7CBC0249309 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/JSONValue/JSONValue.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSONValue.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DA5A86A8435C9E3398C4D091 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JSONValueDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E3C5BB22163631F00C19A95 /* Sources */ = {
@@ -434,6 +499,7 @@
 		};
 		5E3C5BE22163632000C19A95 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 995EBF9E743780E1EE47B20B /* Pods-JSONValueDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -451,6 +517,7 @@
 		};
 		5E3C5BE32163632000C19A95 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6CD87E0743EAB0CDD1967377 /* Pods-JSONValueDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
