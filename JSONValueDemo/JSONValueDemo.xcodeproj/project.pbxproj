@@ -15,7 +15,6 @@
 		5E3C5BC72163631F00C19A95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E3C5BC52163631F00C19A95 /* LaunchScreen.storyboard */; };
 		5E3C5BD22163631F00C19A95 /* JSONValueDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3C5BD12163631F00C19A95 /* JSONValueDemoTests.swift */; };
 		5E3C5BDD2163631F00C19A95 /* JSONValueDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3C5BDC2163631F00C19A95 /* JSONValueDemoUITests.swift */; };
-		5E3C5BEC2163646C00C19A95 /* JSONValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3C5BEB2163646C00C19A95 /* JSONValue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +49,6 @@
 		5E3C5BD82163631F00C19A95 /* JSONValueDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSONValueDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E3C5BDC2163631F00C19A95 /* JSONValueDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValueDemoUITests.swift; sourceTree = "<group>"; };
 		5E3C5BDE2163631F00C19A95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5E3C5BEB2163646C00C19A95 /* JSONValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONValue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +79,6 @@
 		5E3C5BAD2163631F00C19A95 = {
 			isa = PBXGroup;
 			children = (
-				5E3C5BEA2163645300C19A95 /* Source */,
 				5E3C5BB82163631F00C19A95 /* JSONValueDemo */,
 				5E3C5BD02163631F00C19A95 /* JSONValueDemoTests */,
 				5E3C5BDB2163631F00C19A95 /* JSONValueDemoUITests */,
@@ -129,15 +126,6 @@
 				5E3C5BDE2163631F00C19A95 /* Info.plist */,
 			);
 			path = JSONValueDemoUITests;
-			sourceTree = "<group>";
-		};
-		5E3C5BEA2163645300C19A95 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				5E3C5BEB2163646C00C19A95 /* JSONValue.swift */,
-			);
-			name = Source;
-			path = ../Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,7 +260,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E3C5BC22163631F00C19A95 /* JSONValueDemo.xcdatamodeld in Sources */,
-				5E3C5BEC2163646C00C19A95 /* JSONValue.swift in Sources */,
 				5E3C5BBC2163631F00C19A95 /* ViewController.swift in Sources */,
 				5E3C5BBA2163631F00C19A95 /* AppDelegate.swift in Sources */,
 			);
