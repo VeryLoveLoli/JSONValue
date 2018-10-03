@@ -508,13 +508,27 @@ public struct JSONValue {
      */
     public subscript(dynamicMember index: String) -> JSONValue {
         
-        if let i = Int(index) {
+        get {
             
-            return self[i]
+            if let i = Int(index) {
+                
+                return self[i]
+            }
+            else {
+                
+                return self[index]
+            }
         }
-        else {
+        set {
             
-            return self[index]
+            if let i = Int(index) {
+                
+                self[i] = newValue
+            }
+            else {
+                
+                self[index] = newValue
+            }
         }
     }
     
