@@ -29,6 +29,7 @@ end
 	pod repo add CocoaPodsSource https://github.com/VeryLoveLoli/CocoaPodsSource.git
 	pod repo update
 	pod install
+	pod update
 
 ## Usage
 

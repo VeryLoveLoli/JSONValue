@@ -287,7 +287,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/JSONValue/JSONValue.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -296,7 +296,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JSONValueDemo/Pods-JSONValueDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DA5A86A8435C9E3398C4D091 /* [CP] Check Pods Manifest.lock */ = {
