@@ -12,7 +12,7 @@ import Foundation
 
 public struct Number {
     
-    var value: String
+    private var value: String
     
     public init()              {  value = ""     }
     public init(_ v: Int)      {  value = "\(v)" }
@@ -47,7 +47,7 @@ public struct Number {
     public var float:  Float   { get { return value.float } set { value = "\(newValue)" } }
     public var double: Double  { get { return value.double } set { value = "\(newValue)" } }
     public var bool:   Bool    { get { return value.bool } set { value = "\(newValue)" } }
-    public var string: String  { get { return  value } set { value = "\(newValue)" } }
+    public var string: String  { get { return  value } set { value = newValue } }
 }
 
 // MARK: - Number 等号 赋值
@@ -170,7 +170,6 @@ public struct JSONValue {
                     
                     let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     
-                    
                     switch json {
                     case let a as Array<Any>:
                         type = .array
@@ -222,12 +221,16 @@ public struct JSONValue {
                 type = .array
                 array = a.map{ JSONValue($0) }
                 
-            case let d as Dictionary<String, Any>:
+            case let d as Dictionary<String, Any?>:
                 
                 type = .dictionary
                 for (k,v) in d {
                     dictionary[k] = JSONValue(v)
                 }
+                
+            case _ as NSNull:
+                
+                type = .empty
                 
             default:
                 
@@ -248,10 +251,27 @@ public struct JSONValue {
     public var array = Array<JSONValue>()
     
     /// 数值
-    public var number = Number() {
+    private var value = Number()
+    
+    /// 数值
+    public var number: Number {
         
-        willSet {
-            type = .number
+        get {
+            
+            return value
+        }
+        
+        set {
+            
+            switch type {
+            case .number:
+                value = newValue
+            case .empty:
+                type = .number
+                value = newValue
+            default:
+                print("JSONValue not an number or empty")
+            }
         }
     }
     
@@ -346,7 +366,7 @@ public struct JSONValue {
             dictionaryString += "}"
             return dictionaryString
         case .empty:
-            return isValueObject ? "NULL" : ""
+            return isValueObject ? "null" : ""
         }
     }
     
@@ -471,7 +491,7 @@ public struct JSONValue {
         
         get {
             
-            if let i = Int(index), type == .array {
+            if let i = Int(index), type == .array || type == .empty {
                 
                 return self[i]
             }
@@ -482,7 +502,7 @@ public struct JSONValue {
         }
         set {
             
-            if let i = Int(index), type == .array {
+            if let i = Int(index), type == .array || type == .empty {
                 
                 self[i] = newValue
             }
