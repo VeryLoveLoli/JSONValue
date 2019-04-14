@@ -10,6 +10,10 @@ import Foundation
 
 // MARK: - 数值
 
+/**
+ *  Number
+ *  简易快捷数值取值
+ */
 public struct Number {
     
     private var value: String
