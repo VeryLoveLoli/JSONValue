@@ -32,22 +32,22 @@ public struct Number {
     public init(_ v: Bool)     {  value = v ? "1" : "0" }
     public init(_ v: String)   {  value = v }
 
-    public var int:    Int     { get { return value.int } }
-    public var int8:   Int8    { get { return value.int8 } }
-    public var int16:  Int16   { get { return value.int16 } }
-    public var int32:  Int32   { get { return value.int32 } }
-    public var int64:  Int64   { get { return value.int64 } }
+    public var int:    Int     { get { return value.int } set { value = "\(newValue)" } }
+    public var int8:   Int8    { get { return value.int8 } set { value = "\(newValue)" } }
+    public var int16:  Int16   { get { return value.int16 } set { value = "\(newValue)" } }
+    public var int32:  Int32   { get { return value.int32 } set { value = "\(newValue)" } }
+    public var int64:  Int64   { get { return value.int64 } set { value = "\(newValue)" } }
 
-    public var uint:   UInt    { get { return value.uint } }
-    public var uint8:  UInt8   { get { return value.uint8 } }
-    public var uint16: UInt16  { get { return value.uint16 } }
-    public var uint32: UInt32  { get { return value.uint32 } }
-    public var uint64: UInt64  { get { return value.uint64 } }
+    public var uint:   UInt    { get { return value.uint } set { value = "\(newValue)" } }
+    public var uint8:  UInt8   { get { return value.uint8 } set { value = "\(newValue)" } }
+    public var uint16: UInt16  { get { return value.uint16 } set { value = "\(newValue)" } }
+    public var uint32: UInt32  { get { return value.uint32 } set { value = "\(newValue)" } }
+    public var uint64: UInt64  { get { return value.uint64 } set { value = "\(newValue)" } }
     
-    public var float:  Float   { get { return value.float } }
-    public var double: Double  { get { return value.double } }
-    public var bool:   Bool    { get { return value.bool } }
-    public var string: String  { get { return  value } }
+    public var float:  Float   { get { return value.float } set { value = "\(newValue)" } }
+    public var double: Double  { get { return value.double } set { value = "\(newValue)" } }
+    public var bool:   Bool    { get { return value.bool } set { value = "\(newValue)" } }
+    public var string: String  { get { return  value } set { value = "\(newValue)" } }
 }
 
 // MARK: - Number 等号 赋值
@@ -92,20 +92,18 @@ extension String {
     public var bool:   Bool    { get { return self != "" && self != "0" && self != "false" } }
 }
 
-// MARK: - 空值
+// MARK: - 类型
 
-public struct Empty {
+public enum JSONType {
     
-    // MARK: Parameter
-
-    public var array: Array<Any> = []
-    public var dictionary: Dictionary<String, Any> = [:]
-    public var string: String = ""
-    public var number: Number = Number()
-    
-    // MARK: init
-
-    public init() {}
+    /// 数组
+    case array
+    /// 字典
+    case dictionary
+    /// 数组
+    case number
+    /// 空
+    case empty
 }
 
 // MARK: - JSON数据取值
@@ -119,7 +117,7 @@ public struct JSONValue {
     
     // MARK: init
     
-    public init(_ obj: Any? = Empty()) {
+    public init(_ obj: Any? = nil) {
         
         if let value = obj {
             
@@ -127,7 +125,10 @@ public struct JSONValue {
                 
             case let json as JSONValue:
                 
-                object = json.object
+                type = json.type
+                dictionary = json.dictionary
+                array = json.array
+                number = json.number
                 
             case let string as String:
                 
@@ -135,178 +136,164 @@ public struct JSONValue {
                     
                     do {
                         
-                        let json: Any = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                         
                         switch json {
-                        case let array as Array<Any>:
-                            object = array
-                        case let dictionary as Dictionary<String, Any>:
-                            object = dictionary
+                        case let a as Array<Any>:
+                            type = .array
+                            array = a.map{ JSONValue($0) }
+                        case let d as Dictionary<String, Any>:
+                            type = .dictionary
+                            for (k,v) in d {
+                                dictionary[k] = JSONValue(v)
+                            }
                         default:
-                            object = string
+                            type = .number
+                            number = Number(string)
                         }
                         
                     } catch  {
                         
-                        object = string
+                        type = .number
+                        number = Number(string)
                     }
                 }
                 else {
                     
-                    object = string
+                    type = .number
+                    number = Number(string)
                 }
                 
             case let data as Data:
                 
                 do {
                     
-                    let json: Any = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
                     
-                    object = json
+                    
+                    switch json {
+                    case let a as Array<Any>:
+                        type = .array
+                        array = a.map{ JSONValue($0) }
+                    case let d as Dictionary<String, Any>:
+                        type = .dictionary
+                        for (k,v) in d {
+                            dictionary[k] = JSONValue(v)
+                        }
+                    default:
+                        if let string = String.init(data: data, encoding: .utf8) {
+                            
+                            type = .number
+                            number = Number(string)
+                        }
+                    }
                     
                 } catch  {
                     
                     if let string = String.init(data: data, encoding: .utf8) {
                         
-                        object = string
-                    }
-                    else {
-                        
-                        object = Empty()
+                        type = .number
+                        number = Number(string)
                     }
                 }
                 
-            case let number as Number:
+            case let n as Number:
                 
-                object = number
+                type = .number
+                number = n
                 
             case let int as IntegerLiteralType:
                 
-                object = Number(int)
+                type = .number
+                number = Number(int)
 
             case let bool as BooleanLiteralType:
                 
-                object = Number(bool)
+                type = .number
+                number = Number(bool)
 
             case let float as FloatLiteralType:
                 
-                object = Number(float)
+                type = .number
+                number = Number(float)
                 
-            case let array as Array<Any>:
+            case let a as Array<Any>:
                 
-                object = array
+                type = .array
+                array = a.map{ JSONValue($0) }
                 
-            case let dictionary as Dictionary<String, Any>:
+            case let d as Dictionary<String, Any>:
                 
-                object = dictionary
+                type = .dictionary
+                for (k,v) in d {
+                    dictionary[k] = JSONValue(v)
+                }
                 
             default:
-                object = Empty()
+                
+                print("JSONValue value not an dictionary or array or number or empty")
             }
-        }
-        else {
-            
-            object = Empty()
         }
     }
     
     // MARK: Parameter
     
-    /// 数据对象
-    private var object: Any
+    /// 类型
+    private var type: JSONType = .empty
+    
+    /// 字典
+    public var dictionary = Dictionary<String, JSONValue>()
+    
+    /// 数组
+    public var array = Array<JSONValue>()
+    
+    /// 数值
+    public var number = Number() {
+        
+        willSet {
+            type = .number
+        }
+    }
     
     /// 字符串
     public var string: String {
         
         get {
             
-            return self.JSONFormatString()
-        }
-        set {
-            
-            object = newValue
-        }
-    }
-    
-    /// 数值
-    public var number: Number {
-        
-        get {
-            
-            switch object {
-                
-            case let number as Number:
-                return number
-            case let string as String:
-                return Number.init(string)
-            default:
-                return Number()
+            switch type {
+            case .array, .dictionary:
+                return JSONFormatString()
+            case .number, .empty:
+                return number.string
             }
         }
         set {
             
-            object = newValue
+            let json = JSONValue(newValue)
+            
+            type = json.type
+            dictionary = json.dictionary
+            array = json.array
+            number = json.number
         }
     }
     
-    /// 字典
-    public var dictionary: Dictionary<String, JSONValue> {
-        
-        get {
-            
-            switch self.object {
-                
-            case let dictionary as Dictionary<String, JSONValue>:
-                return dictionary
-            case let dictionary as Dictionary<String, Any>:
-                var dict = [String : JSONValue](minimumCapacity: dictionary.count)
-                for (key, value) in dictionary {
-                    dict[key] = JSONValue(value)
-                }
-                return dict
-            default:
-                return [:]
-            }
-        }
-        set {
-            
-            object = newValue
-        }
-    }
     
-    /// 数组
-    public var array: Array<JSONValue> {
-        
-        get {
-            
-            switch object {
-                
-            case let array as Array<JSONValue>:
-                return array
-            case let array as Array<Any>:
-                return array.map{ JSONValue($0) }
-            default:
-                return []
-            }
-        }
-        set {
-            
-            object = newValue
-        }
-    }
     
     /**
      JSON格式化字符串
      
-     - parameter    isValueObject:  是否是 数组/字典 元素值
+     - parameter    isValueObject:      是否是 数组/字典 元素值
+     - parameter    isPrettyPrinted:    是否漂亮的格式
+     - parameter    level:              层次字符串
      */
-    public func JSONFormatString(_ isValueObject: Bool = false) -> String {
+    public func JSONFormatString(_ isValueObject: Bool = false, isPrettyPrinted: Bool = false, level: String = "") -> String {
         
-        switch object {
+        switch type {
             
-        case let string as String:
+        case .number:
             if isValueObject {
-                var value = string.replacingOccurrences(of: "\\", with: "\\\\")
+                var value = number.string.replacingOccurrences(of: "\\", with: "\\\\")
                 value = value.replacingOccurrences(of: "\"", with: "\\\"")
                 value = value.replacingOccurrences(of: "\n", with: "\\n")
                 value = value.replacingOccurrences(of: "\r", with: "\\r")
@@ -314,48 +301,52 @@ public struct JSONValue {
                 return "\"\(value)\""
             }
             else {
-                return string
+                return number.string
             }
-        case let number as Number:
-            return number.string
-        case let array as Array<Any>:
-            var string = "["
-            
+        case .array:
+            var arrayString = "["
             for item in array {
-                
-                string += JSONValue.init(item).JSONFormatString(true)
-                string += ","
+                if isPrettyPrinted {
+                    arrayString += "\n\t" + level
+                }
+                arrayString += item.JSONFormatString(true, isPrettyPrinted: isPrettyPrinted, level: isPrettyPrinted ? level + "\t" : level)
+                arrayString += ","
             }
-            
             if array.count > 0 {
-                
-                string.remove(at: string.index(before: string.endIndex))
+                arrayString.remove(at: arrayString.index(before: arrayString.endIndex))
             }
-            
-            string += "]"
-            return string
-        case let dictionary as Dictionary<String, Any>:
-            var string = "{"
-            
-            for item in dictionary {
-                
-                string += "\""
-                string += item.key
-                string += "\""
-                string += ":"
-                string += JSONValue.init(item.value).JSONFormatString(true)
-                string += ","
+            if isPrettyPrinted {
+                arrayString += "\n" + level
             }
-            
+            arrayString += "]"
+            return arrayString
+        case .dictionary:
+            var dictionaryString = "{"
+            for (key,value) in dictionary {
+                if isPrettyPrinted {
+                    dictionaryString += "\n\t" + level
+                }
+                dictionaryString += "\""
+                dictionaryString += key
+                dictionaryString += "\""
+                dictionaryString += ":"
+                if isPrettyPrinted {
+                    dictionaryString += " "
+                }
+                dictionaryString += value.JSONFormatString(true, isPrettyPrinted: isPrettyPrinted, level: isPrettyPrinted ? level + "\t" : level)
+                dictionaryString += ","
+            }
             if dictionary.count > 0 {
                 
-                string.remove(at: string.index(before: string.endIndex))
+                dictionaryString.remove(at: dictionaryString.index(before: dictionaryString.endIndex))
             }
-            
-            string += "}"
-            return string
-        default:
-            return isValueObject ? "\"\"" : ""
+            if isPrettyPrinted {
+                dictionaryString += "\n" + level
+            }
+            dictionaryString += "}"
+            return dictionaryString
+        case .empty:
+            return isValueObject ? "NULL" : ""
         }
     }
     
@@ -368,44 +359,24 @@ public struct JSONValue {
         
         get {
             
-            switch object {
-                
-            case let array as Array<Any>:
-                
-                if array.count > index {
-                    
-                    return JSONValue(array[index])
-                }
-                else {
-                    
-                    return JSONValue()
-                }
-                
-            default:
-                return JSONValue()
+            if type == .array && array.count>index {
+                return array[index]
             }
+            return JSONValue()
         }
         set {
             
-            switch object {
-                
-            case var array as Array<Any>:
-                
+            switch type {
+            case .array:
                 if array.count > index {
-                    
-                    array[index] = newValue.object
+                    array[index] = newValue
                 }
                 else {
-                    
-                    array.append(newValue.object)
+                    array.append(newValue)
                 }
-                object = array
-                
-            case let empty as Empty:
-                
-                object = empty.array
-                self[index] = newValue
-                
+            case .empty:
+                type = .array
+                array.append(newValue)
             default:
                 print("JSONValue not an array or empty")
             }
@@ -419,30 +390,20 @@ public struct JSONValue {
         
         get {
             
-            switch object {
-                
-            case let dictionary as Dictionary<String, Any>:
-                return JSONValue(dictionary[index])
-                
-            default:
-                return JSONValue()
+            if type == .dictionary, let value = dictionary[index] {
+                return value
             }
+            return JSONValue()
         }
         
         set {
             
-            switch object {
-                
-            case var dictionary as Dictionary<String, Any>:
-                
-                dictionary[index] = newValue.object
-                object = dictionary
-                
-            case let empty as Empty:
-                
-                object = empty.dictionary
-                self[index] = newValue
-                
+            switch type {
+            case .dictionary:
+                dictionary[index] = newValue
+            case .empty:
+                type = .dictionary
+                dictionary[index] = newValue
             default:
                 print("JSONValue not an dictionary or empty")
             }
@@ -510,7 +471,7 @@ public struct JSONValue {
         
         get {
             
-            if let i = Int(index) {
+            if let i = Int(index), type == .array {
                 
                 return self[i]
             }
@@ -521,7 +482,7 @@ public struct JSONValue {
         }
         set {
             
-            if let i = Int(index) {
+            if let i = Int(index), type == .array {
                 
                 self[i] = newValue
             }
@@ -537,8 +498,8 @@ public struct JSONValue {
      */
     public func isEmpty() -> Bool {
         
-        switch object {
-        case _ as Empty:
+        switch type {
+        case .empty:
             return true
         default:
             return false
@@ -550,41 +511,6 @@ public struct JSONValue {
      */
     public func formatPrint() {
         
-        let string = self.JSONFormatString()
-        
-        if let data = string.data(using: .utf8) {
-            
-            do {
-                
-                let json: Any = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                
-                do {
-                    
-                    let jsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                    
-                    if let jsonString = String.init(data: jsonData, encoding: .utf8) {
-                        
-                        print(jsonString)
-                    }
-                    else {
-                        
-                        print(jsonData)
-                    }
-                    
-                }
-                catch {
-                    
-                    print(json)
-                }
-                
-            } catch  {
-                
-                print(string)
-            }
-        }
-        else {
-            
-            print(string)
-        }
+        print(JSONFormatString(isPrettyPrinted: true))
     }
 }
