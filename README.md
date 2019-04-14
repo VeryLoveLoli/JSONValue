@@ -20,7 +20,7 @@ use_frameworks!
 
 target 'MyApp' do
 
-    pod 'JSONValue', '0.0.3'
+    pod 'JSONValue', '0.0.5'
 end
 
 ```
@@ -149,4 +149,23 @@ json.0.number = 10
 json.key.0.string = "value"
 /// if Dictionary key is int; jsonData = ["key": ["1": "value"]]
 json.key["1"].string = "value"
+```
+
+##### v0.0.5 权限
+
+```swift
+/// 下标/字符串 可修改值的类型 以下的值一定会改变
+var json = JSONValue(["x":["xx", "a"],"d":["k":"v"]])
+json.x.string = "["1":"a"]"
+json.d = "["1","a"]" 
+
+/// number/dictionary/array 设置值的时候不是对应的类型或空类型
+///则设置的值不能成功
+var json = JSONValue(["x":["xx", "a"],"d":["k":"v"]])
+json.x.number = 1 ///设置失败，x值的类型是数组
+json.d.number = 2 ///设置失败，d值的类型是字典
+json.d1.number = 3 ///设置成功，d1值的类型是空类型
+json.x.x = JSONValue("aa") ///设置失败，x值的类型是数组
+json.x1.x = JSONValue("aa") ///设置成功，d1值的类型是空类型
+json.x.0.number = 10 ///设置成功，x数组第一个值是number(数值)类型
 ```
