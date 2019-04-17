@@ -20,7 +20,7 @@ use_frameworks!
 
 target 'MyApp' do
 
-    pod 'JSONValue', '0.0.5'
+    pod 'JSONValue', '0.0.6'
 end
 
 ```
@@ -55,48 +55,61 @@ Dictionary<String,Any>,Array<Any>,String,Number,Int,UInt,Double,Float,Bool,nil
 */
 
 let json = JSONValue(jsonData)
+/// or
+let json = jsonData.json
 ```
 
-### Subscript
+### Subscript dynamicMemberLookup 支持动态下标取值/赋值
 
 ```swift
 /// Array
-let item = json[0].string
+let item = json[0]
+let number = json[0].number
+let string = json[0].number.string
+let bool = json[0].number.bool
+
+let item = json.0
+let number = json.0.number
+let string = json.0.number.string
+let bool = json.0.number.bool
+
+json[0] = "string".json
+json[0] = 123.json
 ```
 
 ```swift
 /// Dictionary
-let item = json["key"].string
+let item = json["key"]
+let number = json["key"].number
+let string = json["key"].number.string
+let bool = json["key"].number.bool
+
+let item = json.key
+let number = json.key.number
+let string = json.key.number.string
+let bool = json.key.number.bool
+
+json.key = "string".json
+json.key = 123.json
 ```
 
 ```swift
 /// path
-let item = json["key1"]["key2"].string
+let item = json["key1"]["key2"]
 /// or
-let item = json["key"][0].string
+let item = json["key"][0]
 /// or
-let item = json[["key", 0]].string
-```
+let item = json[["key", 0]]
 
-##### v0.0.2 dynamicMemberLookup 支持动态下标取值
+json["key1"]["key2"] = "string".json
+json["key"][0] = "string".json
+json[["key", 0]] = "string".json 
 
-```swift
-/// Array
-let item = json.0.string
-```
+let item = json.key1.key2
+let item = json.key.0
 
-```swift
-/// Dictionary
-let item = json.key.string
-```
-
-```swift
-/// path
-let item = json.key1.key2.string
-/// or
-let item = json.key.0.string
-/// if Dictionary key is int; jsonData = ["key": ["1": "value"]]
-let item = json.key["1"].string
+json.key1.key2 = "string".json
+json.key.0 = true.json
 ```
 
 ### JSON Value
@@ -104,68 +117,10 @@ let item = json.key["1"].string
 ```swift
 let dictionary = json.dictionary
 let array = json.array
-let string = json.string
 let number = json.number
+let string = json.number.string
 let bool = json.number.bool
 let int = json.number.int
 let double = json.number.double
 let float = json.number.float
-```
-
-### Setter
-
-```swift
-/// Dictionary
-json["key"] = JSONValue("value")
-json["key"].string = "value"
-json["key"].number = 10.0
-json["key"].number = true
-```
-```swift
-/// Array
-json[0] = JSONValue("value")
-json[0].string = "value"
-json[0].number = 10
-```
-```swift
-/// path
-json["key"][0].string = "value"
-json[["key", 0]].string = "value"
-```
-
-##### v0.0.3 dynamicMemberLookup 支持动态下标设置值
-
-```swift
-/// Dictionary
-json.key = JSONValue("value")
-json.key.string = "value"
-json.key.number = 10.0
-json.key.number = true
-/// Array
-json.0 = JSONValue("value")
-json.0.string = "value"
-json.0.number = 10
-/// path
-json.key.0.string = "value"
-/// if Dictionary key is int; jsonData = ["key": ["1": "value"]]
-json.key["1"].string = "value"
-```
-
-##### v0.0.5 权限
-
-```swift
-/// 下标/字符串 可修改值的类型 以下的值一定会改变
-var json = JSONValue(["x":["xx", "a"],"d":["k":"v"]])
-json.x.string = "["1":"a"]"
-json.d = "["1","a"]" 
-
-/// number/dictionary/array 设置值的时候不是对应的类型或空类型
-///则设置的值不能成功
-var json = JSONValue(["x":["xx", "a"],"d":["k":"v"]])
-json.x.number = 1 ///设置失败，x值的类型是数组
-json.d.number = 2 ///设置失败，d值的类型是字典
-json.d1.number = 3 ///设置成功，d1值的类型是空类型
-json.x.x = JSONValue("aa") ///设置失败，x值的类型是数组
-json.x1.x = JSONValue("aa") ///设置成功，d1值的类型是空类型
-json.x.0.number = 10 ///设置成功，x数组第一个值是number(数值)类型
 ```

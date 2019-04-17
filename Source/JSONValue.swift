@@ -96,7 +96,50 @@ extension String {
     public var bool:   Bool    { get { return self != "" && self != "0" && self != "false" } }
 }
 
-// MARK: - 类型
+// MARK: - 基本类型 -> Number
+
+extension Int       { var number: Number { return Number(self) } }
+extension Int8      { var number: Number { return Number(self) } }
+extension Int16     { var number: Number { return Number(self) } }
+extension Int32     { var number: Number { return Number(self) } }
+extension Int64     { var number: Number { return Number(self) } }
+
+extension UInt      { var number: Number { return Number(self) } }
+extension UInt8     { var number: Number { return Number(self) } }
+extension UInt16    { var number: Number { return Number(self) } }
+extension UInt32    { var number: Number { return Number(self) } }
+extension UInt64    { var number: Number { return Number(self) } }
+
+extension Float     { var number: Number { return Number(self) } }
+extension Double    { var number: Number { return Number(self) } }
+extension Bool      { var number: Number { return Number(self) } }
+extension String    { var number: Number { return Number(self) } }
+
+// MARK: - 基本类型 -> JSON
+
+extension Int       { var json: JSONValue { return JSONValue(self) } }
+extension Int8      { var json: JSONValue { return JSONValue(self) } }
+extension Int16     { var json: JSONValue { return JSONValue(self) } }
+extension Int32     { var json: JSONValue { return JSONValue(self) } }
+extension Int64     { var json: JSONValue { return JSONValue(self) } }
+
+extension UInt      { var json: JSONValue { return JSONValue(self) } }
+extension UInt8     { var json: JSONValue { return JSONValue(self) } }
+extension UInt16    { var json: JSONValue { return JSONValue(self) } }
+extension UInt32    { var json: JSONValue { return JSONValue(self) } }
+extension UInt64    { var json: JSONValue { return JSONValue(self) } }
+
+extension Float     { var json: JSONValue { return JSONValue(self) } }
+extension Double    { var json: JSONValue { return JSONValue(self) } }
+extension Bool      { var json: JSONValue { return JSONValue(self) } }
+extension String    { var json: JSONValue { return JSONValue(self) } }
+
+extension Number    { var json: JSONValue { return JSONValue(self) } }
+extension Array     { var json: JSONValue { return JSONValue(self) } }
+extension Dictionary{ var json: JSONValue { return JSONValue(self) } }
+extension Data      { var json: JSONValue { return JSONValue(self) } }
+
+// MARK: - JSON类型
 
 public enum JSONType {
     
@@ -121,18 +164,15 @@ public struct JSONValue {
     
     // MARK: init
     
-    public init(_ obj: Any? = nil) {
+    public init(_ object: Any? = nil) {
         
-        if let value = obj {
+        if let value = object {
             
             switch value {
                 
             case let json as JSONValue:
                 
-                type = json.type
-                dictionary = json.dictionary
-                array = json.array
-                number = json.number
+                self = json
                 
             case let string as String:
                 
@@ -144,27 +184,27 @@ public struct JSONValue {
                         
                         switch json {
                         case let a as Array<Any>:
-                            type = .array
+                            valueType = .array
                             array = a.map{ JSONValue($0) }
                         case let d as Dictionary<String, Any>:
-                            type = .dictionary
+                            valueType = .dictionary
                             for (k,v) in d {
                                 dictionary[k] = JSONValue(v)
                             }
                         default:
-                            type = .number
+                            valueType = .number
                             number = Number(string)
                         }
                         
                     } catch  {
                         
-                        type = .number
+                        valueType = .number
                         number = Number(string)
                     }
                 }
                 else {
                     
-                    type = .number
+                    valueType = .number
                     number = Number(string)
                 }
                 
@@ -176,17 +216,17 @@ public struct JSONValue {
                     
                     switch json {
                     case let a as Array<Any>:
-                        type = .array
+                        valueType = .array
                         array = a.map{ JSONValue($0) }
                     case let d as Dictionary<String, Any>:
-                        type = .dictionary
+                        valueType = .dictionary
                         for (k,v) in d {
                             dictionary[k] = JSONValue(v)
                         }
                     default:
                         if let string = String.init(data: data, encoding: .utf8) {
                             
-                            type = .number
+                            valueType = .number
                             number = Number(string)
                         }
                     }
@@ -195,46 +235,46 @@ public struct JSONValue {
                     
                     if let string = String.init(data: data, encoding: .utf8) {
                         
-                        type = .number
+                        valueType = .number
                         number = Number(string)
                     }
                 }
                 
             case let n as Number:
                 
-                type = .number
+                valueType = .number
                 number = n
                 
             case let int as IntegerLiteralType:
                 
-                type = .number
+                valueType = .number
                 number = Number(int)
 
             case let bool as BooleanLiteralType:
                 
-                type = .number
+                valueType = .number
                 number = Number(bool)
 
             case let float as FloatLiteralType:
                 
-                type = .number
+                valueType = .number
                 number = Number(float)
                 
             case let a as Array<Any>:
                 
-                type = .array
+                valueType = .array
                 array = a.map{ JSONValue($0) }
                 
             case let d as Dictionary<String, Any?>:
                 
-                type = .dictionary
+                valueType = .dictionary
                 for (k,v) in d {
                     dictionary[k] = JSONValue(v)
                 }
                 
             case _ as NSNull:
                 
-                type = .empty
+                valueType = .empty
                 
             default:
                 
@@ -246,63 +286,202 @@ public struct JSONValue {
     // MARK: Parameter
     
     /// 类型
-    private var type: JSONType = .empty
-    
+    private(set) var valueType = JSONType.empty
     /// 字典
-    public var dictionary = Dictionary<String, JSONValue>()
-    
+    private(set) var dictionary = Dictionary<String, JSONValue>()
     /// 数组
-    public var array = Array<JSONValue>()
-    
+    private(set) var array = Array<JSONValue>()
     /// 数值
-    private var value = Number()
+    private(set) var number = Number()
     
-    /// 数值
-    public var number: Number {
+    // MARK: Subscript
+    
+    /**
+     数组下标
+     */
+    public subscript(_ index: Int) -> JSONValue {
         
         get {
             
-            return value
+            if valueType == .array && array.count>index {
+                return array[index]
+            }
+            return JSONValue()
         }
-        
         set {
             
-            switch type {
-            case .number:
-                value = newValue
+            switch valueType {
+            case .array:
+                if array.count > index {
+                    array[index] = newValue
+                }
+                else {
+                    array.append(newValue)
+                }
             case .empty:
-                type = .number
-                value = newValue
+                valueType = .array
+                array.append(newValue)
             default:
-                print("JSONValue not an number or empty")
+                print("JSONValue not an array or empty")
             }
         }
     }
     
-    /// 字符串
-    public var string: String {
+    /**
+     字典下标
+     */
+    public subscript(index: String) -> JSONValue {
         
         get {
             
-            switch type {
-            case .array, .dictionary:
-                return JSONFormatString()
-            case .number, .empty:
-                return number.string
+            if valueType == .dictionary, let value = dictionary[index] {
+                return value
+            }
+            return JSONValue()
+        }
+        
+        set {
+            
+            switch valueType {
+            case .dictionary:
+                dictionary[index] = newValue
+            case .empty:
+                valueType = .dictionary
+                dictionary[index] = newValue
+            default:
+                print("JSONValue not an dictionary or empty")
+            }
+        }
+    }
+    
+    /**
+     下标组
+     */
+    public subscript(indexes: [Any]) -> JSONValue {
+        
+        get {
+            
+            switch indexes.count {
+                
+            case 0:
+                return self
+            case 1:
+                switch indexes[0] {
+                    
+                case let string as String:
+                    return self[string]
+                case let int as Int:
+                    return self[int]
+                default:
+                    return JSONValue()
+                }
+            default:
+                var items = indexes
+                let first = items.remove(at: 0)
+                return self[[first]][items]
             }
         }
         set {
             
-            let json = JSONValue(newValue)
-            
-            type = json.type
-            dictionary = json.dictionary
-            array = json.array
-            number = json.number
+            switch indexes.count {
+                
+            case 0:
+                return
+            case 1:
+                switch indexes[0] {
+                    
+                case let string as String:
+                    self[string] = newValue
+                case let int as Int:
+                    self[int] = newValue
+                default:
+                    return
+                }
+            default:
+                var items = indexes
+                let first = items.remove(at: 0)
+                self[[first]][items] = newValue
+            }
         }
     }
     
+    /**
+     动态下标
+     */
+    public subscript(dynamicMember index: String) -> JSONValue {
+        
+        get {
+            
+            if let i = Int(index), valueType == .array || valueType == .empty {
+                
+                return self[i]
+            }
+            else {
+                
+                return self[index]
+            }
+        }
+        set {
+            
+            if let i = Int(index), valueType == .array || valueType == .empty {
+                
+                self[i] = newValue
+            }
+            else {
+                
+                self[index] = newValue
+            }
+        }
+    }
     
+    /**
+     插入/添加 数组元素
+     */
+    public mutating func insert(_ json: JSONValue, index: Int = Int.max) {
+        
+        if valueType == .empty {
+            
+            valueType = .array
+        }
+        
+        if valueType == .array {
+            
+            if array.count > index {
+                
+                array.insert(json, at: index)
+            }
+            else {
+                
+                array.append(json)
+            }
+        }
+        else {
+            
+            print("JSONValue not an array or empty")
+        }
+    }
+    
+    /**
+     删除数组元素
+     */
+    public mutating func remove(_ index: Int) {
+        
+        if valueType == .array {
+            
+            array.remove(at: index)
+        }
+    }
+    
+    /**
+     删除字典元素
+     */
+    public mutating func remove(_ key: String) {
+        
+        if valueType == .dictionary {
+            
+            dictionary.removeValue(forKey: key)
+        }
+    }
     
     /**
      JSON格式化字符串
@@ -313,7 +492,7 @@ public struct JSONValue {
      */
     public func JSONFormatString(_ isValueObject: Bool = false, isPrettyPrinted: Bool = false, level: String = "") -> String {
         
-        switch type {
+        switch valueType {
             
         case .number:
             if isValueObject {
@@ -374,147 +553,16 @@ public struct JSONValue {
         }
     }
     
-    // MARK: Subscript
-    
     /**
-     数组下标
+     JSON格式化字数据
+     
+     - parameter    isValueObject:      是否是 数组/字典 元素值
+     - parameter    isPrettyPrinted:    是否漂亮的格式
+     - parameter    level:              层次字符串
      */
-    public subscript(_ index: Int) -> JSONValue {
+    public func JSONFormatData(_ isValueObject: Bool = false, isPrettyPrinted: Bool = false, level: String = "") -> Data {
         
-        get {
-            
-            if type == .array && array.count>index {
-                return array[index]
-            }
-            return JSONValue()
-        }
-        set {
-            
-            switch type {
-            case .array:
-                if array.count > index {
-                    array[index] = newValue
-                }
-                else {
-                    array.append(newValue)
-                }
-            case .empty:
-                type = .array
-                array.append(newValue)
-            default:
-                print("JSONValue not an array or empty")
-            }
-        }
-    }
-    
-    /**
-     字典下标
-     */
-    public subscript(index: String) -> JSONValue {
-        
-        get {
-            
-            if type == .dictionary, let value = dictionary[index] {
-                return value
-            }
-            return JSONValue()
-        }
-        
-        set {
-            
-            switch type {
-            case .dictionary:
-                dictionary[index] = newValue
-            case .empty:
-                type = .dictionary
-                dictionary[index] = newValue
-            default:
-                print("JSONValue not an dictionary or empty")
-            }
-        }
-    }
-    
-    /**
-     下标组
-     */
-    public subscript(indexes: [Any]) -> JSONValue {
-        
-        get {
-            
-            switch indexes.count {
-                
-            case 0:
-                return self
-            case 1:
-                switch indexes[0] {
-                    
-                case let string as String:
-                    return self[string]
-                case let int as Int:
-                    return self[int]
-                default:
-                    return JSONValue()
-                }
-            default:
-                var items = indexes
-                items.remove(at: 0)
-                var nextJSON = self[[indexes[0]]]
-                return nextJSON[items]
-            }
-        }
-        set {
-            
-            switch indexes.count {
-                
-            case 0:
-                return
-            case 1:
-                switch indexes[0] {
-                    
-                case let string as String:
-                    self[string] = newValue
-                case let int as Int:
-                    self[int] = newValue
-                default:
-                    return
-                }
-            default:
-                var items = indexes
-                items.remove(at: 0)
-                var nextJSON = self[[indexes[0]]]
-                nextJSON[items] = newValue
-                self[[indexes[0]]] = nextJSON
-            }
-        }
-    }
-    
-    /**
-     动态下标
-     */
-    public subscript(dynamicMember index: String) -> JSONValue {
-        
-        get {
-            
-            if let i = Int(index), type == .array || type == .empty {
-                
-                return self[i]
-            }
-            else {
-                
-                return self[index]
-            }
-        }
-        set {
-            
-            if let i = Int(index), type == .array || type == .empty {
-                
-                self[i] = newValue
-            }
-            else {
-                
-                self[index] = newValue
-            }
-        }
+        return JSONFormatString(isValueObject, isPrettyPrinted: isPrettyPrinted, level: level).data(using: .utf8) ?? Data.init()
     }
     
     /**
@@ -522,11 +570,15 @@ public struct JSONValue {
      */
     public func isEmpty() -> Bool {
         
-        switch type {
+        switch valueType {
+        case .dictionary:
+            return dictionary.isEmpty
+        case .array:
+            return array.isEmpty
+        case .number:
+            return number.string.isEmpty
         case .empty:
             return true
-        default:
-            return false
         }
     }
     
