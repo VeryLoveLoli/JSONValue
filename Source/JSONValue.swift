@@ -98,46 +98,46 @@ extension String {
 
 // MARK: - 基本类型 -> Number
 
-extension Int       { var number: Number { return Number(self) } }
-extension Int8      { var number: Number { return Number(self) } }
-extension Int16     { var number: Number { return Number(self) } }
-extension Int32     { var number: Number { return Number(self) } }
-extension Int64     { var number: Number { return Number(self) } }
+extension Int       { public var number: Number { return Number(self) } }
+extension Int8      { public var number: Number { return Number(self) } }
+extension Int16     { public var number: Number { return Number(self) } }
+extension Int32     { public var number: Number { return Number(self) } }
+extension Int64     { public var number: Number { return Number(self) } }
 
-extension UInt      { var number: Number { return Number(self) } }
-extension UInt8     { var number: Number { return Number(self) } }
-extension UInt16    { var number: Number { return Number(self) } }
-extension UInt32    { var number: Number { return Number(self) } }
-extension UInt64    { var number: Number { return Number(self) } }
+extension UInt      { public var number: Number { return Number(self) } }
+extension UInt8     { public var number: Number { return Number(self) } }
+extension UInt16    { public var number: Number { return Number(self) } }
+extension UInt32    { public var number: Number { return Number(self) } }
+extension UInt64    { public var number: Number { return Number(self) } }
 
-extension Float     { var number: Number { return Number(self) } }
-extension Double    { var number: Number { return Number(self) } }
-extension Bool      { var number: Number { return Number(self) } }
-extension String    { var number: Number { return Number(self) } }
+extension Float     { public var number: Number { return Number(self) } }
+extension Double    { public var number: Number { return Number(self) } }
+extension Bool      { public var number: Number { return Number(self) } }
+extension String    { public var number: Number { return Number(self) } }
 
 // MARK: - 基本类型 -> JSON
 
-extension Int       { var json: JSONValue { return JSONValue(self) } }
-extension Int8      { var json: JSONValue { return JSONValue(self) } }
-extension Int16     { var json: JSONValue { return JSONValue(self) } }
-extension Int32     { var json: JSONValue { return JSONValue(self) } }
-extension Int64     { var json: JSONValue { return JSONValue(self) } }
+extension Int       { public var json: JSONValue { return JSONValue(self) } }
+extension Int8      { public var json: JSONValue { return JSONValue(self) } }
+extension Int16     { public var json: JSONValue { return JSONValue(self) } }
+extension Int32     { public var json: JSONValue { return JSONValue(self) } }
+extension Int64     { public var json: JSONValue { return JSONValue(self) } }
 
-extension UInt      { var json: JSONValue { return JSONValue(self) } }
-extension UInt8     { var json: JSONValue { return JSONValue(self) } }
-extension UInt16    { var json: JSONValue { return JSONValue(self) } }
-extension UInt32    { var json: JSONValue { return JSONValue(self) } }
-extension UInt64    { var json: JSONValue { return JSONValue(self) } }
+extension UInt      { public var json: JSONValue { return JSONValue(self) } }
+extension UInt8     { public var json: JSONValue { return JSONValue(self) } }
+extension UInt16    { public var json: JSONValue { return JSONValue(self) } }
+extension UInt32    { public var json: JSONValue { return JSONValue(self) } }
+extension UInt64    { public var json: JSONValue { return JSONValue(self) } }
 
-extension Float     { var json: JSONValue { return JSONValue(self) } }
-extension Double    { var json: JSONValue { return JSONValue(self) } }
-extension Bool      { var json: JSONValue { return JSONValue(self) } }
-extension String    { var json: JSONValue { return JSONValue(self) } }
+extension Float     { public var json: JSONValue { return JSONValue(self) } }
+extension Double    { public var json: JSONValue { return JSONValue(self) } }
+extension Bool      { public var json: JSONValue { return JSONValue(self) } }
+extension String    { public var json: JSONValue { return JSONValue(self) } }
 
-extension Number    { var json: JSONValue { return JSONValue(self) } }
-extension Array     { var json: JSONValue { return JSONValue(self) } }
-extension Dictionary{ var json: JSONValue { return JSONValue(self) } }
-extension Data      { var json: JSONValue { return JSONValue(self) } }
+extension Number    { public var json: JSONValue { return JSONValue(self) } }
+extension Array     { public var json: JSONValue { return JSONValue(self) } }
+extension Dictionary{ public var json: JSONValue { return JSONValue(self) } }
+extension Data      { public var json: JSONValue { return JSONValue(self) } }
 
 // MARK: - JSON类型
 
