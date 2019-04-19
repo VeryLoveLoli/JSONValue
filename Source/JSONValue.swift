@@ -286,13 +286,13 @@ public struct JSONValue {
     // MARK: Parameter
     
     /// 类型
-    private(set) var valueType = JSONType.empty
+    public private(set) var valueType = JSONType.empty
     /// 字典
-    private(set) var dictionary = Dictionary<String, JSONValue>()
+    public private(set) var dictionary = Dictionary<String, JSONValue>()
     /// 数组
-    private(set) var array = Array<JSONValue>()
+    public private(set) var array = Array<JSONValue>()
     /// 数值
-    private(set) var number = Number()
+    public private(set) var number = Number()
     
     // MARK: Subscript
     
