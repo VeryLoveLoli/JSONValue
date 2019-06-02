@@ -77,67 +77,67 @@ extension Number: ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, Expres
 
 // MARK: - String -> 数值
 
-extension String {
+public extension String {
     
-    public var int:    Int     { get {  return Int(self.double) } }
-    public var int8:   Int8    { get { return Int8( (self.int << 56) >> 56 ) } }
-    public var int16:  Int16   { get { return Int16( (self.int << 48) >> 48 ) } }
-    public var int32:  Int32   { get { return Int32( (self.int << 32) >> 32 ) } }
-    public var int64:  Int64   { get { return Int64( self.int ) } }
+    var int:    Int     { get {  return Int(self.double) } }
+    var int8:   Int8    { get { return Int8( (self.int << 56) >> 56 ) } }
+    var int16:  Int16   { get { return Int16( (self.int << 48) >> 48 ) } }
+    var int32:  Int32   { get { return Int32( (self.int << 32) >> 32 ) } }
+    var int64:  Int64   { get { return Int64( self.int ) } }
     
-    public var uint:   UInt    { get { return self.double <= -1 ? (UInt.max - UInt(-self.int) + 1) : (self.double < 0 ? 0 : UInt(self.double)) } }
-    public var uint8:  UInt8   { get { return UInt8( self.uint % ( UInt(UInt8.max) + 1 ) ) } }
-    public var uint16: UInt16  { get { return UInt16( self.uint % ( UInt(UInt16.max) + 1 ) ) } }
-    public var uint32: UInt32  { get { return UInt32( self.uint % ( UInt(UInt32.max) + 1 ) ) } }
-    public var uint64: UInt64  { get { return UInt64( self.uint ) } }
+    var uint:   UInt    { get { return self.double <= -1 ? (UInt.max - UInt(-self.int) + 1) : (self.double < 0 ? 0 : UInt(self.double)) } }
+    var uint8:  UInt8   { get { return UInt8( self.uint % ( UInt(UInt8.max) + 1 ) ) } }
+    var uint16: UInt16  { get { return UInt16( self.uint % ( UInt(UInt16.max) + 1 ) ) } }
+    var uint32: UInt32  { get { return UInt32( self.uint % ( UInt(UInt32.max) + 1 ) ) } }
+    var uint64: UInt64  { get { return UInt64( self.uint ) } }
     
-    public var float:  Float   { get { return Float.init(self) ?? 0 } }
-    public var double: Double  { get { return Double.init(self) ?? 0 } }
-    public var bool:   Bool    { get { return self != "" && self != "0" && self != "false" } }
+    var float:  Float   { get { return Float.init(self) ?? 0 } }
+    var double: Double  { get { return Double.init(self) ?? 0 } }
+    var bool:   Bool    { get { return self != "" && self != "0" && self != "false" } }
 }
 
 // MARK: - 基本类型 -> Number
 
-extension Int       { public var number: Number { return Number(self) } }
-extension Int8      { public var number: Number { return Number(self) } }
-extension Int16     { public var number: Number { return Number(self) } }
-extension Int32     { public var number: Number { return Number(self) } }
-extension Int64     { public var number: Number { return Number(self) } }
+public extension Int       { var number: Number { return Number(self) } }
+public extension Int8      { var number: Number { return Number(self) } }
+public extension Int16     { var number: Number { return Number(self) } }
+public extension Int32     { var number: Number { return Number(self) } }
+public extension Int64     { var number: Number { return Number(self) } }
 
-extension UInt      { public var number: Number { return Number(self) } }
-extension UInt8     { public var number: Number { return Number(self) } }
-extension UInt16    { public var number: Number { return Number(self) } }
-extension UInt32    { public var number: Number { return Number(self) } }
-extension UInt64    { public var number: Number { return Number(self) } }
+public extension UInt      { var number: Number { return Number(self) } }
+public extension UInt8     { var number: Number { return Number(self) } }
+public extension UInt16    { var number: Number { return Number(self) } }
+public extension UInt32    { var number: Number { return Number(self) } }
+public extension UInt64    { var number: Number { return Number(self) } }
 
-extension Float     { public var number: Number { return Number(self) } }
-extension Double    { public var number: Number { return Number(self) } }
-extension Bool      { public var number: Number { return Number(self) } }
-extension String    { public var number: Number { return Number(self) } }
+public extension Float     { var number: Number { return Number(self) } }
+public extension Double    { var number: Number { return Number(self) } }
+public extension Bool      { var number: Number { return Number(self) } }
+public extension String    { var number: Number { return Number(self) } }
 
 // MARK: - 基本类型 -> JSON
 
-extension Int       { public var json: JSONValue { return JSONValue(self) } }
-extension Int8      { public var json: JSONValue { return JSONValue(self) } }
-extension Int16     { public var json: JSONValue { return JSONValue(self) } }
-extension Int32     { public var json: JSONValue { return JSONValue(self) } }
-extension Int64     { public var json: JSONValue { return JSONValue(self) } }
+public extension Int       { var json: JSONValue { return JSONValue(self) } }
+public extension Int8      { var json: JSONValue { return JSONValue(self) } }
+public extension Int16     { var json: JSONValue { return JSONValue(self) } }
+public extension Int32     { var json: JSONValue { return JSONValue(self) } }
+public extension Int64     { var json: JSONValue { return JSONValue(self) } }
 
-extension UInt      { public var json: JSONValue { return JSONValue(self) } }
-extension UInt8     { public var json: JSONValue { return JSONValue(self) } }
-extension UInt16    { public var json: JSONValue { return JSONValue(self) } }
-extension UInt32    { public var json: JSONValue { return JSONValue(self) } }
-extension UInt64    { public var json: JSONValue { return JSONValue(self) } }
+public extension UInt      { var json: JSONValue { return JSONValue(self) } }
+public extension UInt8     { var json: JSONValue { return JSONValue(self) } }
+public extension UInt16    { var json: JSONValue { return JSONValue(self) } }
+public extension UInt32    { var json: JSONValue { return JSONValue(self) } }
+public extension UInt64    { var json: JSONValue { return JSONValue(self) } }
 
-extension Float     { public var json: JSONValue { return JSONValue(self) } }
-extension Double    { public var json: JSONValue { return JSONValue(self) } }
-extension Bool      { public var json: JSONValue { return JSONValue(self) } }
-extension String    { public var json: JSONValue { return JSONValue(self) } }
+public extension Float     { var json: JSONValue { return JSONValue(self) } }
+public extension Double    { var json: JSONValue { return JSONValue(self) } }
+public extension Bool      { var json: JSONValue { return JSONValue(self) } }
+public extension String    { var json: JSONValue { return JSONValue(self) } }
 
-extension Number    { public var json: JSONValue { return JSONValue(self) } }
-extension Array     { public var json: JSONValue { return JSONValue(self) } }
-extension Dictionary{ public var json: JSONValue { return JSONValue(self) } }
-extension Data      { public var json: JSONValue { return JSONValue(self) } }
+public extension Number    { var json: JSONValue { return JSONValue(self) } }
+public extension Array     { var json: JSONValue { return JSONValue(self) } }
+public extension Dictionary{ var json: JSONValue { return JSONValue(self) } }
+public extension Data      { var json: JSONValue { return JSONValue(self) } }
 
 // MARK: - JSON类型
 
@@ -176,7 +176,7 @@ public struct JSONValue {
                 
             case let string as String:
                 
-                if let data = string.data(using: .utf8) {
+                if let data = string.data(using: .utf8), !data.isEmpty {
                     
                     do {
                         
@@ -210,33 +210,36 @@ public struct JSONValue {
                 
             case let data as Data:
                 
-                do {
+                if !data.isEmpty {
                     
-                    let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                    
-                    switch json {
-                    case let a as Array<Any>:
-                        valueType = .array
-                        array = a.map{ JSONValue($0) }
-                    case let d as Dictionary<String, Any>:
-                        valueType = .dictionary
-                        for (k,v) in d {
-                            dictionary[k] = JSONValue(v)
+                    do {
+                        
+                        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                        
+                        switch json {
+                        case let a as Array<Any>:
+                            valueType = .array
+                            array = a.map{ JSONValue($0) }
+                        case let d as Dictionary<String, Any>:
+                            valueType = .dictionary
+                            for (k,v) in d {
+                                dictionary[k] = JSONValue(v)
+                            }
+                        default:
+                            if let string = String.init(data: data, encoding: .utf8) {
+                                
+                                valueType = .number
+                                number = Number(string)
+                            }
                         }
-                    default:
+                        
+                    } catch  {
+                        
                         if let string = String.init(data: data, encoding: .utf8) {
                             
                             valueType = .number
                             number = Number(string)
                         }
-                    }
-                    
-                } catch  {
-                    
-                    if let string = String.init(data: data, encoding: .utf8) {
-                        
-                        valueType = .number
-                        number = Number(string)
                     }
                 }
                 
@@ -245,20 +248,70 @@ public struct JSONValue {
                 valueType = .number
                 number = n
                 
-            case let int as IntegerLiteralType:
+            case let int as Int:
                 
                 valueType = .number
                 number = Number(int)
-
-            case let bool as BooleanLiteralType:
+                
+            case let int8 as Int8:
+                
+                valueType = .number
+                number = Number(int8)
+                
+            case let int16 as Int16:
+                
+                valueType = .number
+                number = Number(int16)
+                
+            case let int32 as Int32:
+                
+                valueType = .number
+                number = Number(int32)
+                
+            case let int64 as Int64:
+                
+                valueType = .number
+                number = Number(int64)
+                
+            case let uint as UInt:
+                
+                valueType = .number
+                number = Number(uint)
+                
+            case let uint8 as UInt8:
+                
+                valueType = .number
+                number = Number(uint8)
+                
+            case let uint16 as UInt16:
+                
+                valueType = .number
+                number = Number(uint16)
+                
+            case let uint32 as UInt32:
+                
+                valueType = .number
+                number = Number(uint32)
+                
+            case let uint64 as UInt64:
+                
+                valueType = .number
+                number = Number(uint64)
+                
+            case let bool as Bool:
                 
                 valueType = .number
                 number = Number(bool)
 
-            case let float as FloatLiteralType:
+            case let float as Float:
                 
                 valueType = .number
                 number = Number(float)
+            
+            case let double as Double:
+                
+                valueType = .number
+                number = Number(double)
                 
             case let a as Array<Any>:
                 
@@ -278,7 +331,9 @@ public struct JSONValue {
                 
             default:
                 
+                #if DEBUG
                 print("JSONValue value not an dictionary or array or number or empty")
+                #endif
             }
         }
     }
@@ -322,7 +377,9 @@ public struct JSONValue {
                 valueType = .array
                 array.append(newValue)
             default:
+                #if DEBUG
                 print("JSONValue not an array or empty")
+                #endif
             }
         }
     }
@@ -349,7 +406,9 @@ public struct JSONValue {
                 valueType = .dictionary
                 dictionary[index] = newValue
             default:
+                #if DEBUG
                 print("JSONValue not an dictionary or empty")
+                #endif
             }
         }
     }
@@ -457,7 +516,9 @@ public struct JSONValue {
         }
         else {
             
+            #if DEBUG
             print("JSONValue not an array or empty")
+            #endif
         }
     }
     
@@ -587,6 +648,8 @@ public struct JSONValue {
      */
     public func formatPrint() {
         
+        #if DEBUG
         print(JSONFormatString(isPrettyPrinted: true))
+        #endif
     }
 }
