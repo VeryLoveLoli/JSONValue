@@ -20,7 +20,7 @@ use_frameworks!
 
 target 'MyApp' do
 
-    pod 'JSONValue', '0.0.6'
+    pod 'JSONValue', '1.0-master'
 end
 
 ```
