@@ -312,11 +312,21 @@ public struct JSONValue {
                 
                 valueType = .number
                 number = Number(double)
+            
+            case let a as Array<JSONValue>:
+                
+                valueType = .array
+                array = a
                 
             case let a as Array<Any>:
                 
                 valueType = .array
                 array = a.map{ JSONValue($0) }
+                
+            case let d as Dictionary<String, JSONValue>:
+                
+                valueType = .dictionary
+                dictionary = d
                 
             case let d as Dictionary<String, Any?>:
                 
