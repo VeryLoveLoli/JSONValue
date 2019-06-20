@@ -1,6 +1,9 @@
 # JSONValue
 
-一个`Swift`语言简易的`JSON`取值
+`Swift` easy value `JSON`, Support all systems: `macOS` `iOS` `watchOS` `tvOS` `linux ` ... As long as you can run Swift
+
+一个`Swift`语言简易的`JSON`取值，支持 `macOS` `iOS` `watchOS` `tvOS` `linux ` ... 所有系统，只要能运行 `Swift`
+
 
 1. [Integration](#Integration)
 2. [Usage](#Usage)
