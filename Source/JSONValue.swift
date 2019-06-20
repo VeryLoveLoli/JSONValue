@@ -374,20 +374,22 @@ public struct JSONValue {
      */
     public init(bytes: [UInt8]) {
         
-        let format = structure(bytes)
-        
-        if !verify(structure: format) || format.count == 0 {
+        if !bytes.isEmpty {
             
-            valueType = .number
-        }
-        else if !parser(bytes) {
+            let format = structure(bytes)
             
-            valueType = .number
-        }
-        
-        if valueType == .number {
-            
-            number = String.init(cString: bytes).number
+            if !verify(structure: format) {
+                
+                valueType = .number
+                number = String.init(cString: bytes).number
+            }
+            else if !parser(bytes) {
+                
+                valueType = .number
+                array = []
+                dictionary = [:]
+                number = String.init(cString: bytes).number
+            }
         }
     }
     
@@ -436,9 +438,7 @@ public struct JSONValue {
      */
     private func verify(structure: [UInt8]) -> Bool {
         
-        if structure.isEmpty { return true }
-        
-        if structure.count == 1 { return false }
+        if structure.isEmpty { return false }
         
         /// 类型序列
         var array: [JSONType] = []
