@@ -13,5 +13,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        let ss = ["[]", "[111]", "[111,222]", "[[111]]", "[[111,222]]", "[{}]", "[{\"123\": 123}]", "[{},{}]", "[{\"111\": 123, \"222\": 222}]", "[{\"111\": 123, \"222\": 222}, {\"111\": 123, \"222\": 222}]", "[null]", "[null, null]", "[{\"111\": null}]", "{}", "{\"\":\"\"}", "{\"1\":\"\",\"2\":2}", "{\"1\": [[{\"2\": 123}]]}"]
+        
+        for s in ss {
+            
+            print("\n\n")
+
+            let array = [UInt8].init(s.utf8)
+            let j = JSONValue.init(bytes: array)
+            print(j.valueType)
+            j.formatPrint()
+            print("\n")
+            print(s.json.valueType)
+            s.json.formatPrint()
+        }
+        
     }
 }

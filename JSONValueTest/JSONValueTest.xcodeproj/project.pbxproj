@@ -208,13 +208,16 @@
 				TargetAttributes = {
 					5ECB2FA02164FE4500799F12 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 					};
 					5ECB2FB72164FE4600799F12 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						TestTargetID = 5ECB2FA02164FE4500799F12;
 					};
 					5ECB2FC22164FE4600799F12 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						TestTargetID = 5ECB2FA02164FE4500799F12;
 					};
 				};
@@ -450,6 +453,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = JSONValueTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -457,7 +461,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "chuancan-icloud.com.JSONValueTest";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -467,6 +471,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = JSONValueTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -474,7 +479,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "chuancan-icloud.com.JSONValueTest";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -493,7 +498,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "chuancan-icloud.com.JSONValueTestTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JSONValueTest.app/JSONValueTest";
 			};
@@ -513,7 +518,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "chuancan-icloud.com.JSONValueTestTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JSONValueTest.app/JSONValueTest";
 			};
@@ -532,7 +537,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "chuancan-icloud.com.JSONValueTestUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = JSONValueTest;
 			};
@@ -551,7 +556,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "chuancan-icloud.com.JSONValueTestUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = JSONValueTest;
 			};

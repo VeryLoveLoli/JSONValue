@@ -6,7 +6,9 @@
 //  Copyright © 2017年 韦烽传. All rights reserved.
 //
 
+#if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 import Foundation
+#endif
 
 // MARK: - 数值
 
@@ -137,7 +139,11 @@ public extension String    { var json: JSONValue { return JSONValue(self) } }
 public extension Number    { var json: JSONValue { return JSONValue(self) } }
 public extension Array     { var json: JSONValue { return JSONValue(self) } }
 public extension Dictionary{ var json: JSONValue { return JSONValue(self) } }
+#if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 public extension Data      { var json: JSONValue { return JSONValue(self) } }
+#endif
+
+public extension Array where Element == UInt8 { var bytesJSON: JSONValue { return JSONValue(bytes: self) }}
 
 // MARK: - JSON类型
 
@@ -164,6 +170,11 @@ public struct JSONValue {
     
     // MARK: init
     
+    /**
+     初始化
+     
+     - parameter    object:     数据对象
+     */
     public init(_ object: Any? = nil) {
         
         if let value = object {
@@ -176,6 +187,7 @@ public struct JSONValue {
                 
             case let string as String:
                 
+                #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
                 if let data = string.data(using: .utf8), !data.isEmpty {
                     
                     do {
@@ -207,7 +219,11 @@ public struct JSONValue {
                     valueType = .number
                     number = Number(string)
                 }
-                
+                #else
+                self = JSONValue.init(bytes: [UInt8].init(string.utf8))
+                #endif
+            
+            #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
             case let data as Data:
                 
                 if !data.isEmpty {
@@ -243,6 +259,7 @@ public struct JSONValue {
                     }
                 }
                 
+            #endif
             case let n as Number:
                 
                 valueType = .number
@@ -334,11 +351,13 @@ public struct JSONValue {
                 for (k,v) in d {
                     dictionary[k] = JSONValue(v)
                 }
-                
+            
+            #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
             case _ as NSNull:
                 
                 valueType = .empty
                 
+            #endif
             default:
                 
                 #if DEBUG
@@ -346,6 +365,276 @@ public struct JSONValue {
                 #endif
             }
         }
+    }
+    
+    /**
+     初始化
+     
+     - parameter    bytes:      JSON数据内容
+     */
+    public init(bytes: [UInt8]) {
+        
+        let format = structure(bytes)
+        
+        if !verify(structure: format) || format.count == 0 {
+            
+            valueType = .number
+        }
+        else if !parser(bytes) {
+            
+            valueType = .number
+        }
+        
+        if valueType == .number {
+            
+            number = String.init(cString: bytes).number
+        }
+    }
+    
+    /**
+     数据结构
+     
+     - parameter    bytes:  数据
+     */
+    private func structure(_ bytes: [UInt8]) -> [UInt8] {
+        
+        /// 数据结构
+        var structure: [UInt8] = []
+        
+        /// 上一个字符
+        var lastByte: UInt8 = 0
+        /// 是否是字符串
+        var isString = false
+        
+        for byte in bytes {
+            
+            /// 字符串数据
+            if lastByte != 92 && byte == 34 {
+                
+                isString = !isString
+            }
+            else if !isString {
+                
+                switch byte {
+                case 91, 93, 123, 125, 58, 44:
+                    structure.append(byte)
+                default:
+                    break
+                }
+            }
+            
+            lastByte = byte
+        }
+        
+        return structure
+    }
+    
+    /**
+     校验数据结构
+     
+     - parameter    structure:  数据结构
+     */
+    private func verify(structure: [UInt8]) -> Bool {
+        
+        if structure.isEmpty { return true }
+        
+        if structure.count == 1 { return false }
+        
+        /// 类型序列
+        var array: [JSONType] = []
+        /// 最后一个字符
+        var lastByte: UInt8 = 0
+        /// 是否已开始
+        var isStart = false
+        
+        for byte in structure {
+            
+            /// 第一层 数组/字典 已结束 但结构未结束
+            if isStart && array.isEmpty {  return false }
+            
+            /// 开始
+            if !isStart { isStart = true }
+            
+            switch byte {
+            case 91:
+                array.append(.array)
+            case 93:
+                if array.count == 0 { return false }
+                if array.removeLast() != .array { return false }
+            case 123:
+                array.append(.dictionary)
+            case 125:
+                if array.count == 0 { return false }
+                if array.removeLast() != .dictionary { return false }
+            case 58:
+                if array.count == 0 { return false }
+                if array.last! != .dictionary { return false }
+                if lastByte != 123 && lastByte != 44 { return false }
+            case 44:
+                if array.count == 0 { return false }
+                if array.last! == .array { if lastByte == 123 || lastByte == 58 { return false } }
+                else if array.last! == .dictionary { if lastByte == 123 || lastByte == 44 { return false } }
+            default:
+                break
+            }
+            
+            lastByte = byte
+        }
+        
+        return array.isEmpty
+    }
+    
+    /**
+     解析
+     
+     - parameter    bytes:  数据
+     */
+    private mutating func parser(_ bytes: [UInt8]) -> Bool {
+        
+        /// 上一个字符
+        var lastByte: UInt8 = 0
+        /// 是否是字符串
+        var isString = false
+        /// 字符串
+        var char: [UInt8] = []
+        /// 类型列表
+        var typeList: [JSONType] = []
+        /// 节点路径
+        var elementPath: [Any] = []
+        /// 值
+        var value: [UInt8] = []
+
+        for byte in bytes {
+            
+            /// 字符串数据
+            if lastByte != 92 && byte == 34 {
+                
+                isString = !isString
+                
+                if isString {
+                    
+                    char = []
+                }
+                else {
+                    
+                    char.append(0)
+                }
+            }
+            else if !isString {
+                
+                switch byte {
+                    
+                case 91:
+                    
+                    char = []
+                    if !value.isEmpty { return false }
+                    typeList.append(.array)
+                    elementPath.append(0)
+                    
+                case 93:
+                    
+                    if !char.isEmpty { self[elementPath] = String.init(cString: char).json }
+                    else if !value.isEmpty {
+                        value.append(0)
+                        let v = String.init(cString: value)
+                        if v == "null" {  self[elementPath] = JSONValue() }
+                        else { self[elementPath] = v.json }
+                    }
+                    
+                    typeList.removeLast()
+                    elementPath.removeLast()
+                    
+                    if char.isEmpty && value.isEmpty && self[elementPath].valueType == .empty {
+                        
+                        if elementPath.isEmpty { self = JSONValue([]) }
+                        else { self[elementPath] = JSONValue([]) }
+                    }
+                    
+                    char = []
+                    value = []
+                    
+                case 123:
+                    
+                    char = []
+                    if !value.isEmpty { return false }
+                    typeList.append(.dictionary)
+
+                case 125:
+                    
+                    if !char.isEmpty { self[elementPath] = String.init(cString: char).json }
+                    else if !value.isEmpty {
+                        value.append(0)
+                        let v = String.init(cString: value)
+                        if v == "null" {  self[elementPath] = JSONValue() }
+                        else { self[elementPath] = v.json }
+                    }
+                    
+                    typeList.removeLast()
+                    
+                    if char.isEmpty && value.isEmpty && self[elementPath].valueType == .empty {
+                        
+                        if elementPath.isEmpty { self = JSONValue([:]) }
+                        else { self[elementPath] = JSONValue([:]) }
+                    }
+                    else {
+                        
+                        elementPath.removeLast()
+                    }
+                    
+                    char = []
+                    value = []
+                    
+                case 58:
+                    
+                    if char.isEmpty { return false }
+                    
+                    elementPath.append(String.init(cString: char))
+                    
+                    char = []
+                    value = []
+                    
+                case 44:
+                    
+                    if !char.isEmpty { self[elementPath] = String.init(cString: char).json }
+                    else if !value.isEmpty {
+                        value.append(0)
+                        let v = String.init(cString: value)
+                        if v == "null" {  self[elementPath] = JSONValue() }
+                        else { self[elementPath] = v.json }
+                    }
+
+                    guard let type = typeList.last else { return false }
+                    
+                    if type == .array {
+                        
+                        guard let index = elementPath.last as? Int else { return false }
+                        
+                        elementPath[elementPath.count-1] = index+1
+                    }
+                    else {
+                        
+                        elementPath.removeLast()
+                    }
+                    
+                    char = []
+                    value = []
+
+                case 9, 10, 13, 32:
+                    break
+                    
+                default:
+                    value.append(byte)
+                }
+            }
+            else {
+                
+                char.append(byte)
+            }
+            
+            lastByte = byte
+        }
+        
+        return true
     }
     
     // MARK: Parameter
