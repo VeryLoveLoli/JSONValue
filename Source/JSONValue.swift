@@ -657,7 +657,7 @@ public struct JSONValue {
         
         get {
             
-            if valueType == .array && array.count>index {
+            if valueType == .array && array.count > index && index >= 0 {
                 return array[index]
             }
             return JSONValue()
@@ -666,7 +666,10 @@ public struct JSONValue {
             
             switch valueType {
             case .array:
-                if array.count > index {
+                if index < 0 {
+                    array.insert(newValue, at: 0)
+                }
+                else if array.count > index {
                     array[index] = newValue
                 }
                 else {
@@ -828,7 +831,10 @@ public struct JSONValue {
         
         if valueType == .array {
             
-            array.remove(at: index)
+            if array.count > index && index >= 0 {
+                
+                array.remove(at: index)
+            }
         }
     }
     

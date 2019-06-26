@@ -30,5 +30,14 @@ class ViewController: UIViewController {
             s.json.formatPrint()
         }
         
+        print("----")
+        var json = JSONValue([])
+        json.remove(-1)
+        json.formatPrint()
+        json[-1].formatPrint()
+        json[-1] = "123".json
+        json.formatPrint()
+        json[-1] = "321".json
+        json.formatPrint()
     }
 }
