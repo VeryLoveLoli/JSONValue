@@ -16,7 +16,7 @@ import Foundation
  *  Number
  *  简易快捷数值取值
  */
-public struct Number {
+public struct Number: Hashable {
     
     private var value: String
     
@@ -166,7 +166,7 @@ public enum JSONType {
  *  简易快捷JSON数据取值
  */
 @dynamicMemberLookup
-public struct JSONValue {
+public struct JSONValue: Hashable {
     
     // MARK: init
     
