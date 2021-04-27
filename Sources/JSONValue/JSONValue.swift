@@ -19,8 +19,9 @@ import Foundation
 public struct Number: Hashable {
     
     private var value: String
+    private(set) var isString = false
     
-    public init()              {  value = ""     }
+    public init()              {  value = "" ; isString = true }
     public init(_ v: Int)      {  value = "\(v)" }
     public init(_ v: Int8)     {  value = "\(v)" }
     public init(_ v: Int16)    {  value = "\(v)" }
@@ -36,7 +37,7 @@ public struct Number: Hashable {
     public init(_ v: Float)    {  value = "\(v)" }
     public init(_ v: Double)   {  value = "\(v)" }
     public init(_ v: Bool)     {  value = v ? "1" : "0" }
-    public init(_ v: String)   {  value = v }
+    public init(_ v: String)   {  value = v ; isString = true }
 
     public var int:    Int     { get { return value.int } set { value = "\(newValue)" } }
     public var int8:   Int8    { get { return value.int8 } set { value = "\(newValue)" } }
@@ -153,7 +154,7 @@ public enum JSONType {
     case array
     /// 字典
     case dictionary
-    /// 数组
+    /// 数值
     case number
     /// 空
     case empty
@@ -861,7 +862,7 @@ public struct JSONValue: Hashable {
         switch valueType {
             
         case .number:
-            if isValueObject {
+            if isValueObject && number.isString {
                 var value = number.string.replacingOccurrences(of: "\\", with: "\\\\")
                 value = value.replacingOccurrences(of: "\"", with: "\\\"")
                 value = value.replacingOccurrences(of: "\n", with: "\\n")
@@ -891,7 +892,9 @@ public struct JSONValue: Hashable {
             return arrayString
         case .dictionary:
             var dictionaryString = "{"
-            for (key,value) in dictionary {
+            for (key,value) in dictionary.sorted(by: { (i, j) -> Bool in
+                i.key < j.key
+            }) {
                 if isPrettyPrinted {
                     dictionaryString += "\n\t" + level
                 }

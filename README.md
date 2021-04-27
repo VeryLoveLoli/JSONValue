@@ -14,25 +14,12 @@
 
 ## Integration
 
+### Xcode
+    File -> Swift Packages -> Add Package dependency
+
 ### CocoaPods
 
-```swift
-source 'https://github.com/VeryLoveLoli/CocoaPodsSource.git'
-platform :ios, '10.0'
-use_frameworks!
-
-target 'MyApp' do
-
-    pod 'JSONValue', '1.0-master'
-end
-
-```
-	
-##### 更新CocoaPods
-	pod repo add CocoaPodsSource https://github.com/VeryLoveLoli/CocoaPodsSource.git
-	pod repo update
-	pod install
-	pod update
+[GitHub JSONValue](https://github.com/VeryLoveLoli/JSONValue)
 
 ## Usage
 
